@@ -221,8 +221,8 @@ reglasigma <- function(x) {
 # Identificador Hampel
 reglahampel <- function(x) {
   med <- median(x, na.rm = TRUE)
-  madm <- 1.4826 * median(abs(x - med), na.rm = TRUE)
-  abs(x - med) > 3 * madm
+  v_mad <- 1.4826 * median(abs(x - med), na.rm = TRUE)
+  abs(x - med) > 3 * v_mad
 }
 
 # Regla boxplot
@@ -244,8 +244,15 @@ reglapercentil <- function(x) {
 Utiliza la función `mutate` y `across` para identificar los outliers en la variable `Petal.Length` con todos los métodos de detección de outliers implementados. Genera una columna nueva para cada método. Nota: podría extenderse la aplicación a todas las variables numéricas usando también `mutate`, `across` y `where`.
 
 ```{r Solucion ejercicio 6, include=TRUE, echo=TRUE, eval=TRUE, results=TRUE}
+library(dplyr)
 
-
+dirty_iris_outliers_petal <- dirty_iris %>%
+  mutate(
+    Petal.Length_sigma     = reglasigma(Petal.Length),
+    Petal.Length_hampel    = reglahampel(Petal.Length),
+    Petal.Length_boxplot   = reglaboxplot(Petal.Length),
+    Petal.Length_percentil = reglapercentil(Petal.Length)
+  )
 
 ```
 
