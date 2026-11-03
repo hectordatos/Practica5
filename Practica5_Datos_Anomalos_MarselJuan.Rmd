@@ -368,7 +368,22 @@ sum(is.na(dirty_iris$Petal.Length1))
 - Imputa los missing data en `Petal.Length` empleando en esta ocasión la media para cada tipo de `Species` (usar`group_by` y `mutate`) creando una nueva variable `Petal.Length2`.
 
 ```{r Solucion ejercicio 9b, include=TRUE, echo=TRUE, eval=TRUE, results=TRUE}
+library(dplyr)
 
+# Imputación de valores faltantes en Petal.Length usando la media según la especie
+dirty_iris <- dirty_iris %>%
+  group_by(Species) %>%
+  mutate(
+    Petal.Length2 = ifelse(
+      is.na(Petal.Length),
+      mean(Petal.Length, na.rm = TRUE),
+      Petal.Length
+    )
+  ) %>%
+  ungroup()
+
+# Verificación de que no quedan valores NA en la nueva variable
+sum(is.na(dirty_iris$Petal.Length2))
 
 ```
 
