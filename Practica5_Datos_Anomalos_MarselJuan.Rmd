@@ -265,6 +265,38 @@ En los métodos de detección de outliers analizados, examina los resultados com
 
 ```{r Solucion ejercicio 7, include=TRUE, echo=TRUE, eval=TRUE, results=TRUE}
 
+# Método Regla 3 Sigma
+suma_sigma <- sum(dirty_iris_outliers_petal$Petal.Length_sigma, na.rm = TRUE)
+suma_sigma
+
+# Método Identificador Hampel
+suma_hampel <- sum(dirty_iris_outliers_petal$Petal.Length_hampel, na.rm = TRUE)
+suma_hampel
+
+# Método Regla Boxplot (IQR)
+suma_boxplot <- sum(dirty_iris_outliers_petal$Petal.Length_boxplot, na.rm = TRUE)
+suma_boxplot
+
+# Método de Percentiles
+suma_percentil <- sum(dirty_iris_outliers_petal$Petal.Length_percentil, na.rm = TRUE)
+suma_percentil
+
+```
+
+```{r}
+# Obtención de los valores etiquetados como outliers ordenados de mayor a menor
+outliers_sigma<- sort(dirty_iris_outliers_petal$Petal.Length[dirty_iris_outliers_petal$Petal.Length_sigma == TRUE])
+outliers_sigma
+
+outliers_hampel<- sort(dirty_iris_outliers_petal$Petal.Length[dirty_iris_outliers_petal$Petal.Length_hampel == TRUE])
+outliers_hampel
+
+outliers_boxplot<- sort(dirty_iris_outliers_petal$Petal.Length[dirty_iris_outliers_petal$Petal.Length_boxplot == TRUE])
+outliers_boxplot
+
+outliers_percentil<- sort(dirty_iris_outliers_petal$Petal.Length[dirty_iris_outliers_petal$Petal.Length_percentil == TRUE])
+outliers_percentil
+
 ```
 
 ## Ejercicio 8: Representación gráfica
