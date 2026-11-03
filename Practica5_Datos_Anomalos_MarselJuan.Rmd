@@ -307,6 +307,30 @@ Nota: usa en `geom_point` con la opción `position='jitter'` para mejorar la leg
 
 ```{r Solucion ejercicio 8, include=TRUE, echo=TRUE, eval=TRUE, results=TRUE}
 
+library(ggplot2)
+library(tidyr)
+library(dplyr)
+
+# 1. Reestructurar los datos con pivot_longer
+datos_largos <- dirty_iris_outliers_petal %>%
+  pivot_longer(
+    cols = c(Petal.Length_sigma, Petal.Length_hampel, Petal.Length_boxplot, Petal.Length_percentil),
+    names_to = "Regla",
+    values_to = "Es_Outlier"
+  ) %>%
+  mutate(Es_Outlier = ifelse(Es_Outlier, "Outlier", "Típico"))
+
+# 2. Generar la representación gráfica usando 'datos_largos'
+ggplot(datos_largos, aes(x = Regla, y = Petal.Length, color = Es_Outlier)) +
+  geom_point(position = "jitter", alpha = 0.7, size = 2) +
+  scale_color_manual(values = c("Típico" = "steelblue", "Outlier" = "red")) +
+  labs(
+    title = "Detección de Outliers en Petal.Length según cada regla",
+    x = "Método de Detección",
+    y = "Petal.Length",
+    color = "Estado del Dato"
+  ) +
+  theme_minimal()
 ```
 
 # Imputación de datos
