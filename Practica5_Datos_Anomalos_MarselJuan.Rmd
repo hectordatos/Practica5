@@ -394,14 +394,41 @@ Vamos a comparar ahora los dos métodos de imputación gráficamente eliminando 
 - Recalcula las reglas de identificación de outliers (Ejercicio 6) para la nueva variable `Petal.Length2`.
 
 ```{r Solucion ejercicio 10a, include=TRUE, echo=TRUE, eval=TRUE, results=TRUE}
+library(dplyr)
 
- 
+# Recalcular las reglas de outliers para la variable imputada Petal.Length2
+dirty_iris <- dirty_iris %>%
+  mutate(
+    Petal.Length2_sigma     = reglasigma(Petal.Length2),
+    Petal.Length2_hampel    = reglahampel(Petal.Length2),
+    Petal.Length2_boxplot   = reglaboxplot(Petal.Length2),
+    Petal.Length2_percentil = reglapercentil(Petal.Length2)
+  )
+
 ```
 
 - Representa los dos tipos de imputación empleados en un gráfico de dispersión (`Petal.Length1` vs. `Petal.Length2`) eliminando los outliers identificados con la regla `reglapercentil` y poniendo en diferente color los datos originales y los imputados.
 
 ```{r Solucion ejercicio 10b, include=TRUE, echo=TRUE, eval=TRUE, results=TRUE}
+library(ggplot2)
+library(dplyr)
 
+# Preparar datos, crear indicador de origen y filtrar los outliers de reglapercentil
+datos_grafico <- dirty_iris %>%
+  mutate(Tipo = ifelse(is.na(Petal.Length), "Imputado", "Original")) %>%
+  filter(Petal.Length2_percentil == FALSE) # Eliminar outliers identificados por percentiles
+
+# Generar el gráfico de dispersión (Petal.Length1 vs. Petal.Length2)
+ggplot(datos_grafico, aes(x = Petal.Length1, y = Petal.Length2, color = Tipo)) +
+  geom_point(size = 2.5, alpha = 0.8) +
+  scale_color_manual(values = c("Original" = "steelblue", "Imputado" = "red")) +
+  labs(
+    title = "Comparación de Métodos de Imputación",
+    x = "Petal.Length1 (Media Global)",
+    y = "Petal.Length2 (Media por Especie)",
+    color = "Estado"
+  ) +
+  theme_minimal()
 
 
 ```
