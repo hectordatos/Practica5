@@ -160,7 +160,42 @@ Empleado la función `summarise y across`, calcula la media, la desviación típ
 - Compara los resultados para los dos conjuntos en la variable `Petal.Length`.
 
 ```{r , include = TRUE}
+library(dplyr)
 
+# Definición de la función robústa MADM
+madm <- function(x, na.rm = TRUE) {
+  1.4826 * median(abs(x - median(x, na.rm = na.rm)), na.rm = na.rm)
+}
+
+# Resumen estadístico para dirty_iris 
+resumen_dirty <- dirty_iris %>%
+  summarise(across(where(is.numeric), list(
+    mean   = ~ mean(.x, na.rm = TRUE),
+    sd     = ~ sd(.x, na.rm = TRUE),
+    median = ~ median(.x, na.rm = TRUE),
+    madm   = ~ madm(.x, na.rm = TRUE),
+    iqr    = ~ IQR(.x, na.rm = TRUE)
+  )))
+resumen_dirty
+
+# Resumen estadístico para clean_iris
+resumen_clean <- clean_iris %>%
+  summarise(across(where(is.numeric), list(
+    mean   = ~ mean(.x, na.rm = TRUE),
+    sd     = ~ sd(.x, na.rm = TRUE),
+    median = ~ median(.x, na.rm = TRUE),
+    madm   = ~ madm(.x, na.rm = TRUE),
+    iqr    = ~ IQR(.x, na.rm = TRUE)
+  )))
+resumen_clean
+
+# Comparación de Petal.Length entre ambos conjuntos
+comp_petal_length <- rbind(
+  dirty_iris = resumen_dirty %>% select(starts_with("Petal.Length")),
+  clean_iris = resumen_clean %>% select(starts_with("Petal.Length"))
+)
+
+comp_petal_length
 ```
 
 ## Ejercicio 5: Métodos de detección de outliers
