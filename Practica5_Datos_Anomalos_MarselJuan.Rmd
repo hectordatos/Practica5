@@ -98,7 +98,7 @@ sort(dirty_iris$Sepal.Width, decreasing = TRUE)
 sort(dirty_iris$Petal.Length, decreasing = TRUE)
 sort(dirty_iris$Petal.Width, decreasing = TRUE)
 
-# Debido a los NA, el comando sort no los tiene en cuenta a la hora de orndenar luego hay variables del df donde parecen más observaciones que en otras, debido a que tienen un mayor numero de NAs en sus columnas.
+# Debido a los NA, el comando sort no los tiene en cuenta a la hora de orndenar luego hay variables del df donde parecen más observaciones que en otras, debido a que tienen un mayor numero de NAs en sus columnas. a parte en alguna observación también nos parece valores para variables que son infinito y valores iguales a 0 cosa que es imposible.
 ```
 
 ## Ejercicio 2: Valores especiales
@@ -119,7 +119,10 @@ Reemplaza, en todas las columnas numéricas del data frame `dirty_iris`, los val
 ```{r Solucion ejercicio 2, include=TRUE, echo=TRUE, eval=TRUE, results=TRUE}
 # DEBEMOS ELIMINAR TAMBIEN LOS VALROES IGUALES A CERO YA QUE SE TRATA DE LONGITUDES DE PARTES DE UNA FLOR. NO PUEDEN SER O
 
+library(dplyr)
 
+dirty_iris <- dirty_iris %>%
+  mutate(across(where(is.numeric), ~ ifelse(!is.finite(.) | . <= 0, NA, .)))
 ```
 
 ## Ejercicio 3: Valores perdidos y observaciones completas
