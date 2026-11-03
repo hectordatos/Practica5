@@ -14,7 +14,7 @@ output:
 ---
 
 ```{r setup, cache = F, echo = F, message = F, warning = F, tidy = F}
-# CONFIGURACIÓN GENERAL
+# CONFIGURACIÓN GENERAL.
 library(knitr)
 options(width = 100)
 # Opciones generales chunks
